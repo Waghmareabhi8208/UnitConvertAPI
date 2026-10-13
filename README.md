@@ -246,10 +246,7 @@ This design makes the project easier to maintain and provides a foundation for a
 - Add authentication if required by future use cases.
 
 ## Author
-
-**Your Name**
-
-GitHub: `https://github.com/YOUR-USERNAME`
+Abhishek Waghmare
 
 ## License
 
