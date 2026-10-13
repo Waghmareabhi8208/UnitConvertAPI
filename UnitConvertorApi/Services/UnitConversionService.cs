@@ -76,12 +76,13 @@ namespace UnitConvertorApi.Services
             };
         }
 
+
         private decimal ConvertTemperature(
             decimal value, string from, string to)
         {
             decimal celsius = from switch
             {
-                "celsius" => value,
+                "celsius" or "centigrade" => value,
                 "fahrenheit" => (value - 32m) * 5m / 9m,
                 "kelvin" => value - 273.15m,
                 _ => throw new ArgumentException(
@@ -96,12 +97,13 @@ namespace UnitConvertorApi.Services
 
             return to switch
             {
-                "celsius" => celsius,
+                "celsius" or "centigrade" => celsius,
                 "fahrenheit" => celsius * 9m / 5m + 32m,
                 "kelvin" => celsius + 273.15m,
                 _ => throw new ArgumentException(
                     $"Unsupported temperature unit: {to}")
             };
         }
+
     }
 }
