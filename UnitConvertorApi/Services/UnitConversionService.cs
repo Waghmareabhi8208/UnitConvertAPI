@@ -1,109 +1,79 @@
 ﻿
-namespace UnitConvertorApi.Services
+namespace UnitConvertorApi.Services;
+
+public sealed class UnitConversionService
 {
-    public class UnitConversionService
+    private readonly UnitRegistry _registry;
+
+    public UnitConversionService(UnitRegistry registry)
     {
-        public decimal Convert(
-            string category,
-            decimal value,
-            string fromUnit,
-            string toUnit)
+        _registry = registry;
+    }
+
+    public decimal Convert(
+        string category,
+        decimal value,
+        string fromUnit,
+        string toUnit)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(category);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fromUnit);
+        ArgumentException.ThrowIfNullOrWhiteSpace(toUnit);
+
+        category = category.Trim();
+        fromUnit = fromUnit.Trim();
+        toUnit = toUnit.Trim();
+
+        if (category.Equals(
+            "temperature",
+            StringComparison.OrdinalIgnoreCase))
         {
-            category = category.Trim().ToLowerInvariant();
-            fromUnit = fromUnit.Trim().ToLowerInvariant();
-            toUnit = toUnit.Trim().ToLowerInvariant();
-
-            return category switch
-            {
-                "length" => ConvertLength(value, fromUnit, toUnit),
-                "temperature" => ConvertTemperature(value, fromUnit, toUnit),
-                "weight" => ConvertWeight(value, fromUnit, toUnit),
-
-                _ => throw new ArgumentException(
-                    "Unsupported category. Use length, temperature, or weight.")
-            };
+            return ConvertTemperature(value, fromUnit, toUnit);
         }
 
-        private decimal ConvertLength(
-            decimal value, string from, string to)
-        {
-            decimal meters = from switch
-            {
-                "meters" => value,
-                "feet" => value / 3.280839895m,
-                "kilometers" => value * 1000m,
-                "miles" => value * 1609.344m,
-                "centimeters" => value / 100m,
-                "inches" => value * 0.0254m,
-                _ => throw new ArgumentException(
-                    $"Unsupported length unit: {from}")
-            };
+        var source = _registry.GetLinearUnit(category, fromUnit);
+        var target = _registry.GetLinearUnit(category, toUnit);
 
-            return to switch
-            {
-                "meters" => meters,
-                "feet" => meters * 3.280839895m,
-                "kilometers" => meters / 1000m,
-                "miles" => meters / 1609.344m,
-                "centimeters" => meters * 100m,
-                "inches" => meters / 0.0254m,
-                _ => throw new ArgumentException(
-                    $"Unsupported length unit: {to}")
-            };
+        decimal baseValue = value * source.FactorToBase;
+
+        return baseValue / target.FactorToBase;
+    }
+
+    private decimal ConvertTemperature(
+        decimal value,
+        string from,
+        string to)
+    {
+        decimal celsius = from.ToLowerInvariant() switch
+        {
+            "celsius" or "centigrade" => value,
+
+            "fahrenheit" =>
+                (value - 32m) * 5m / 9m,
+
+            "kelvin" => value - 273.15m,
+
+            _ => throw new ArgumentException(
+                $"Unsupported temperature unit: {from}")
+        };
+
+        if (celsius < -273.15m)
+        {
+            throw new ArgumentException(
+                "Temperature cannot be below absolute zero.");
         }
 
-        private decimal ConvertWeight(
-            decimal value, string from, string to)
+        return to.ToLowerInvariant() switch
         {
-            decimal kilograms = from switch
-            {
-                "kilograms" => value,
-                "grams" => value / 1000m,
-                "pounds" => value / 2.2046226218m,
-                "ounces" => value / 35.27396195m,
-                _ => throw new ArgumentException(
-                    $"Unsupported weight unit: {from}")
-            };
+            "celsius" or "centigrade" => celsius,
 
-            return to switch
-            {
-                "kilograms" => kilograms,
-                "grams" => kilograms * 1000m,
-                "pounds" => kilograms * 2.2046226218m,
-                "ounces" => kilograms * 35.27396195m,
-                _ => throw new ArgumentException(
-                    $"Unsupported weight unit: {to}")
-            };
-        }
+            "fahrenheit" =>
+                celsius * 9m / 5m + 32m,
 
+            "kelvin" => celsius + 273.15m,
 
-        private decimal ConvertTemperature(
-            decimal value, string from, string to)
-        {
-            decimal celsius = from switch
-            {
-                "celsius" or "centigrade" => value,
-                "fahrenheit" => (value - 32m) * 5m / 9m,
-                "kelvin" => value - 273.15m,
-                _ => throw new ArgumentException(
-                    $"Unsupported temperature unit: {from}")
-            };
-
-            if (celsius < -273.15m)
-            {
-                throw new ArgumentException(
-                    "Temperature cannot be below absolute zero.");
-            }
-
-            return to switch
-            {
-                "celsius" or "centigrade" => celsius,
-                "fahrenheit" => celsius * 9m / 5m + 32m,
-                "kelvin" => celsius + 273.15m,
-                _ => throw new ArgumentException(
-                    $"Unsupported temperature unit: {to}")
-            };
-        }
-
+            _ => throw new ArgumentException(
+                $"Unsupported temperature unit: {to}")
+        };
     }
 }

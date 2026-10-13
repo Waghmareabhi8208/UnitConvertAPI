@@ -1,6 +1,26 @@
 [
   {
     "ContainingType": "UnitConvertorApi.Controllers.UnitConverterController",
+    "Method": "GetCategories",
+    "RelativePath": "api/UnitConverter/categories",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UnitConvertorApi.Controllers.UnitConverterController",
     "Method": "Convert",
     "RelativePath": "api/UnitConverter/convert",
     "HttpMethod": "POST",
@@ -10,6 +30,41 @@
       {
         "Name": "request",
         "Type": "UnitConvertorApi.Models.ConversionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "UnitConvertorApi.Models.ConversionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
+    "ContainingType": "UnitConvertorApi.Controllers.UnitConverterController",
+    "Method": "GetUnits",
+    "RelativePath": "api/UnitConverter/units/{category}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "category",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

@@ -3,59 +3,101 @@ using Microsoft.AspNetCore.Mvc;
 using UnitConvertorApi.Models;
 using UnitConvertorApi.Services;
 
-namespace UnitConvertorApi.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UnitConverterController : ControllerBase
-    {
-        private readonly UnitConversionService _conversionService;
+namespace UnitConvertorApi.Controllers;
 
-        public UnitConverterController(
-            UnitConversionService conversionService)
+[ApiController]
+[Route("api/[controller]")]
+public sealed class UnitConverterController : ControllerBase
+{
+    private readonly UnitConversionService _conversionService;
+    private readonly UnitRegistry _registry;
+
+    public UnitConverterController(
+        UnitConversionService conversionService,
+        UnitRegistry registry)
+    {
+        _conversionService = conversionService;
+        _registry = registry;
+    }
+
+    [HttpPost("convert")]
+    [ProducesResponseType(
+        typeof(ConversionResponse),
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<ConversionResponse> Convert(
+        [FromBody] ConversionRequest request)
+    {
+        if (request.Value is null)
         {
-            _conversionService = conversionService;
+            return BadRequest(new
+            {
+                message = "Value is required."
+            });
         }
 
-        [HttpPost("convert")]
-        public IActionResult Convert(
-            [FromBody] ConversionRequest request)
+        if (string.IsNullOrWhiteSpace(request.Category) ||
+            string.IsNullOrWhiteSpace(request.FromUnit) ||
+            string.IsNullOrWhiteSpace(request.ToUnit))
         {
-            // Validate required text fields
-            if (string.IsNullOrWhiteSpace(request.Category) ||
-                string.IsNullOrWhiteSpace(request.FromUnit) ||
-                string.IsNullOrWhiteSpace(request.ToUnit))
+            return BadRequest(new
             {
-                return BadRequest(new
-                {
-                    message = "Category, FromUnit and ToUnit are required."
-                });
-            }
+                message =
+                    "Category, FromUnit and ToUnit are required."
+            });
+        }
 
-            try
-            {
-                decimal result = _conversionService.Convert(
-                    request.Category,
-                    request.Value,
-                    request.FromUnit,
-                    request.ToUnit);
+        try
+        {
+            decimal result = _conversionService.Convert(
+                request.Category,
+                request.Value.Value,
+                request.FromUnit,
+                request.ToUnit);
 
-                return Ok(new
-                {
-                    category = request.Category,
-                    inputValue = request.Value,
-                    fromUnit = request.FromUnit,
-                    toUnit = request.ToUnit,
-                    result = result
-                });
-            }
-            catch (ArgumentException ex)
+            return Ok(new ConversionResponse(
+                request.Category.Trim().ToLowerInvariant(),
+                request.Value.Value,
+                request.FromUnit.Trim(),
+                request.ToUnit.Trim(),
+                result));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
             {
-                return BadRequest(new
-                {
-                    message = ex.Message
-                });
-            }
+                message = ex.Message
+            });
+        }
+        catch (OverflowException)
+        {
+            return BadRequest(new
+            {
+                message =
+                    "The conversion result is outside the supported numeric range."
+            });
+        }
+    }
+
+    [HttpGet("categories")]
+    public ActionResult<IEnumerable<string>> GetCategories()
+    {
+        return Ok(_registry.GetCategories());
+    }
+
+    [HttpGet("units/{category}")]
+    public IActionResult GetUnits(string category)
+    {
+        try
+        {
+            return Ok(_registry.GetUnits(category));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
         }
     }
 }
