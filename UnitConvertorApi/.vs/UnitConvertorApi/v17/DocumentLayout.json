@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\UnitConvertAPI\\UnitConvertorApi\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{55015F7B-3B35-4B9C-92EF-6D569C7A2C35}|UnitConvertorApi.csproj|d:\\unitconvertapi\\unitconvertorapi\\controllers\\unitconvertercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{55015F7B-3B35-4B9C-92EF-6D569C7A2C35}|UnitConvertorApi.csproj|solutionrelative:controllers\\unitconvertercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{55015F7B-3B35-4B9C-92EF-6D569C7A2C35}|UnitConvertorApi.csproj|d:\\unitconvertapi\\unitconvertorapi\\services\\unitconversionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{55015F7B-3B35-4B9C-92EF-6D569C7A2C35}|UnitConvertorApi.csproj|solutionrelative:services\\unitconversionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,19 +27,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "UnitConverterController.cs",
+              "DocumentMoniker": "D:\\UnitConvertAPI\\UnitConvertorApi\\Controllers\\UnitConverterController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UnitConverterController.cs",
+              "ToolTip": "D:\\UnitConvertAPI\\UnitConvertorApi\\Controllers\\UnitConverterController.cs",
+              "RelativeToolTip": "Controllers\\UnitConverterController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwDIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-13T04:55:18.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "UnitConversionService.cs",
               "DocumentMoniker": "D:\\UnitConvertAPI\\UnitConvertorApi\\Services\\UnitConversionService.cs",
               "RelativeDocumentMoniker": "Services\\UnitConversionService.cs",
               "ToolTip": "D:\\UnitConvertAPI\\UnitConvertorApi\\Services\\UnitConversionService.cs",
               "RelativeToolTip": "Services\\UnitConversionService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAAAGsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-13T04:51:13.564Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ConversionRequest.cs",
               "DocumentMoniker": "D:\\UnitConvertAPI\\UnitConvertorApi\\Models\\ConversionRequest.cs",
               "RelativeDocumentMoniker": "Models\\ConversionRequest.cs",
@@ -43,8 +60,7 @@
               "RelativeToolTip": "Models\\ConversionRequest.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAQwBMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-13T04:47:37.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-13T04:47:37.348Z"
             }
           ]
         }
