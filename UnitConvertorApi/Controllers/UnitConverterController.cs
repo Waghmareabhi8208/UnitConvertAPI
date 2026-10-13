@@ -21,6 +21,17 @@ namespace UnitConvertorApi.Controllers
         public IActionResult Convert(
             [FromBody] ConversionRequest request)
         {
+            // Validate required text fields
+            if (string.IsNullOrWhiteSpace(request.Category) ||
+                string.IsNullOrWhiteSpace(request.FromUnit) ||
+                string.IsNullOrWhiteSpace(request.ToUnit))
+            {
+                return BadRequest(new
+                {
+                    message = "Category, FromUnit and ToUnit are required."
+                });
+            }
+
             try
             {
                 decimal result = _conversionService.Convert(
